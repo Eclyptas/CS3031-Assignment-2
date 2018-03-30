@@ -1,0 +1,24 @@
+{
+    "name": "CS3031 Assignment 2",
+    "version": "0.01",
+    "description": "Cian McGrath: 15319428",
+    "permissions": [
+      "activeTab",
+      "storage"
+    ],
+    "options_page" : "options.html",
+    "background": {
+      "page":"background.html",
+      "background_page": ["background.html"]
+    },
+    "content_scripts" : [
+      {
+        "matches": ["https://reddit.com/*"],
+        "js": ["openpgp.min.js"]
+      }
+    ],
+    "page_action": {
+      "default_popup": "popup.html"
+    },
+    "manifest_version": 2
+}

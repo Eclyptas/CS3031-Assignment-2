@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Extension Options</title>
+  </head>
+  <body>
+    <h1>Options page for CS3031 Assignment 2</h1>
+    <h3>Your Username:</h3>
+    <p id="username"></p>
+    <h3>Public Key:</h3>
+    <p id="userPublicKey"></p>
+    <h2>Generate new keys</h2>
+    <form>
+      Username:
+      <br>
+        <input type="text" id="newUsername">
+      <br>
+      Passphrase:
+      <br>
+        <input type="text" id="newPassphrase">
+      <br>
+      <br>
+        <input id="newUser" type="button" value="Generate new Keys">
+    </form>
+    <h2>Your Connections</h2>
+    <p id="connections"></p>
+    <h2>Add Connection</h2>
+    <form id="newConnection">
+      Username:
+      <br>
+      <input type="text" id="newConnectionUsername">
+      <br>
+      Public key:
+      <br>
+      <input type="text" id="newConnectionPublicKey">
+      <br>
+      <br>
+      <input id="addConnection" type="button" value="Add new connection">
+      <input id="deleteConnection" type="button" value="Delete connection">
+    </form>
+    <script src="openpgp.min.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>
