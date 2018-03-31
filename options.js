@@ -1,5 +1,4 @@
-//Run cryptography worker thread
-openpgp.initWorker({ path:'openpgp.worker.min.js' });
+const bits = 2048;
 
 //set up the functions to call when buttons on the page are pressed
 document.getElementById("newUser").onclick = function(){saveNewKeys();};
@@ -29,29 +28,20 @@ function saveNewKeys(){
   var usernameEntered = document.getElementById('newUsername').value;
   var passphraseEntered = document.getElementById('newPassphrase').value;
 
-  var newKeyOptions = {
-	  userIds: [
-      { username: usernameEntered }
-    ],
-	  numBits: 4096,                         // RSA key size
-	  passphrase: passphraseEntered          // protects the private key
-  };
+  var generatedRSAKey = cryptico.generateRSAKey(passphraseEntered, bits);
+  var publicKeyString = cryptico.publicKeyString(generatedRSAKey);
+  console.log(publicKeyString);
 
-  //generate a new pgp key based on the key options entered by the user
-  openpgp.generateKey(newKeyOptions).then(function(key) {
-    // store the new key and needed data in the browser storage
-	  chrome.storage.sync.set({
+  chrome.storage.sync.set({
 	    personalusername: usernameEntered,
 	    passphrase: passphraseEntered,
 	    personalpassphrase: passphraseEntered,
-	    privatekey: key.privateKeyArmored,
-	    publickey: key.publicKeyArmored
-	  }, function() {
+	    publickey: publicKeyString
+	}, function() {
 	    // Display the generated items.
 	    document.getElementById('username').textContent = usernameEntered;
-	    document.getElementById('userPublicKey').textContent = key.publicKeyArmored;
-	  });
-  })
+	    document.getElementById('userPublicKey').textContent = publicKeyString;
+  });
 };
 
 
@@ -96,6 +86,12 @@ function deleteConnection(){
 		chrome.storage.sync.set({connections: connectionsString},function() {
         //Update list of connections displayed on page
         updateConnectionsList(connectionsJSON);
+        // as a contact has been removed, there needs to be a new, key generated
+        alert("Please generate new keys now that a member has been removed");
+        chrome.storage.sync.remove(['publickey'], function() {
+      	    // Display the generated items.
+      	    document.getElementById('userPublicKey').textContent = "Invalid, please generate new keys";
+        });
 		});
 	});
 };
@@ -108,7 +104,7 @@ function updateConnectionsList(connectionsJSON){
     if (connectionsJSON.hasOwnProperty(connection)) {
       //Due to the first 97 characters being the same always, no need to display it
       //it also needs to be shortened so that it does not clutter the page
-      connectionsString += connection + "\t:\t" + connectionsJSON[connection].substring(97,95+100)+"...<br>";
+      connectionsString += connection + "\t:\t" + connectionsJSON[connection].substring(0,100)+"...<br>";
     }
   }
   document.getElementById('connections').innerHTML = connectionsString;

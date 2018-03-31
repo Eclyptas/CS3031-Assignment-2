@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="openpgp.min.js"></script>
+    <script src="cryptico-master/cryptico.js"></script>
     <script src="popup.js"></script>
     <style>
-      body { width: 300px; }
+      body { width: 550px; }
       textarea { width: 500px; height: 200px;}
     </style>
   </head>
   <body>
     <p>Highlight the text that you wish to operate on, and then click the button</p>
+    <h3>Recipients (Comma separated)</h3>
     <textarea id="recipient"> </textarea>
     <button id="encrypt">Encrypt Text</button>
     <button id="decrypt">Decrypt Text</button>
+    <h3>Output</h3>
     <textarea id="output"> </textarea>
   </body>
 </html>

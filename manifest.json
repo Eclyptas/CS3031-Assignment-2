@@ -14,7 +14,7 @@
     "content_scripts" : [
       {
         "matches": ["https://reddit.com/*"],
-        "js": ["openpgp.min.js"]
+        "js": ["cryptico-master/cryptico.js"]
       }
     ],
     "page_action": {
