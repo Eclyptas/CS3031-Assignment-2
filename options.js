@@ -86,12 +86,6 @@ function deleteConnection(){
 		chrome.storage.sync.set({connections: connectionsString},function() {
         //Update list of connections displayed on page
         updateConnectionsList(connectionsJSON);
-        // as a contact has been removed, there needs to be a new, key generated
-        alert("Please generate new keys now that a member has been removed");
-        chrome.storage.sync.remove(['publickey'], function() {
-      	    // Display the generated items.
-      	    document.getElementById('userPublicKey').textContent = "Invalid, please generate new keys";
-        });
 		});
 	});
 };
