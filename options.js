@@ -25,8 +25,13 @@ chrome.storage.sync.get(storedItems, function(items) {
 //saves the new keys from the inputted form by the user
 function saveNewKeys(){
   //grabbing the values from the form input
-  var usernameEntered = document.getElementById('newUsername').value;
-  var passphraseEntered = document.getElementById('newPassphrase').value;
+  var displayUsername = document.getElementById('newUsername');
+  var usernameEntered = displayUsername.value;
+  displayUsername.value = "";
+
+  var displayPassphrase = document.getElementById('newPassphrase');
+  var passphraseEntered = displayPassphrase.value;
+  displayPassphrase.value = "";
 
   var generatedRSAKey = cryptico.generateRSAKey(passphraseEntered, bits);
   var publicKeyString = cryptico.publicKeyString(generatedRSAKey);
@@ -47,9 +52,14 @@ function saveNewKeys(){
 
 //Save contact from new connection input
 function saveNewConnection(){
-	//Get the inputted connection data that the user entered into the form
-	var connectionUsername = document.getElementById('newConnectionUsername').value;
-	var connectionPublicKey = document.getElementById('newConnectionPublicKey').value;
+	//Get the inputted connection data that the user entered into the form, also remove it
+  var displayUsername = document.getElementById('newConnectionUsername');
+	var connectionUsername = displayUsername.value;
+  displayUsername.value = "";
+
+  var displayPublicKey = document.getElementById('newConnectionPublicKey');
+  var connectionPublicKey = displayPublicKey.value;
+  displayPublicKey.value = "";
 
 	//Get stored contacts data, then update it with the new information
 	chrome.storage.sync.get(["connections"], function(items) {
@@ -71,8 +81,10 @@ function saveNewConnection(){
 
 //Delete contact from new contact input
 function deleteConnection(){
-  //Get the inputted connection data that the user entered into the form
-	var connectionUsername = document.getElementById('newConnectionUsername').value;
+  //Get the inputted connection data that the user entered into the form, also remove it from display
+  var displayUsername = document.getElementById('newConnectionUsername');
+  var connectionUsername = displayUsername.value;
+  displayUsername.value = "";
   //Get stored contacts data, then update it by removing the contact information, if it exists
 	chrome.storage.sync.get(["connections"], function(items) {
     var connectionsString = items.connections || "{}";

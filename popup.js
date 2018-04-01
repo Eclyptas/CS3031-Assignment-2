@@ -9,7 +9,7 @@ function encryptData() {
     code: "window.getSelection().toString();"
   }, function(content) {
     var recipients = document.getElementById("recipient").value;
-
+    document.getElementById("output").value = "";
     //Get stored data regarding keys for encryption
     var storedItems = ["personalusername","publickey","connections","privatekey","passphrase"];
     chrome.storage.sync.get(storedItems, function(items) {
@@ -21,16 +21,22 @@ function encryptData() {
       var connectionsJSON = JSON.parse(items.connections);
 
       if(!checkConnectionsExist(connectionsJSON,recipientArray)){ return alert("You have entered a recipient that you do not know the name of.");}
+      alert("Encrypting..."); 
 
-      var recipientPublicKey = connectionsJSON[recipientArray[0]];
-      var passphrase = items.passphrase.toString();
-      var sender = items.personalusername;
+      for (var i in recipients) {
+        if(recipientArray[i]!=null){
+          var recipientPublicKey = connectionsJSON[recipientArray[i]];
+          var passphrase = items.passphrase.toString();
+          var sender = items.personalusername;
 
-      var generatedRSAKey = cryptico.generateRSAKey(passphrase,bits);
-      var encrypted = cryptico.encrypt(content.toString(),recipientPublicKey,generatedRSAKey);
+          var generatedRSAKey = cryptico.generateRSAKey(passphrase,bits);
+          var encrypted = cryptico.encrypt(content.toString(),recipientPublicKey,generatedRSAKey);
 
-      // display the decrypted content back to the user
-      document.getElementById("output").value = encrypted.cipher;
+          // display the decrypted content back to the user
+          document.getElementById("output").value += recipientArray[i] + ":\n" + encrypted.cipher + "\n";
+        }
+      }
+      alert("Encryption done.");
     });
   });
 }
@@ -50,6 +56,7 @@ function decryptData() {
       var generatedRSAKey = cryptico.generateRSAKey(passphrase,bits);
       var decrypted = cryptico.decrypt(content.toString(), generatedRSAKey);
       document.getElementById("output").value = decrypted.plaintext;
+      alert("Decryption done.");
     });
   });
 }
@@ -59,7 +66,7 @@ function decryptData() {
 function checkConnectionsExist(connections,recipients){
   for (var i in recipients) {
     if (connections[recipients[i]] == null) {
-      console.log(recipients[i] + " is not one of your connections");
+      console.log(recipients[i] + " is not in your group");
       return false;
     }
   }
